@@ -7,9 +7,7 @@ const header = {
     'Access-Control-Allow-Origin': '*'
 }
 
-export function delivery(token){
-    header['Authorization'] = token;
-}
+
 
 
 export function sendScore(match){

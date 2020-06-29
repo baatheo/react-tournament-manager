@@ -1,5 +1,6 @@
 import React, {useState, createContext, useEffect, useContext} from "react";
 import {Form, Button} from "react-bootstrap";
+import { Redirect } from "react-router-dom"
 import "../styles/Login.css"
 
 
@@ -50,9 +51,12 @@ const UserLogin = () => {
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
     const {token, setToken} = useContext(UserContext);
+    const [auth, setAuth] = useState(false);
 
     useEffect(() => {
-        console.log(`useEffect token: ${token}`)
+        if(token !==""){
+            setAuth(true);
+        }
     }, [token]);
 
 
@@ -88,6 +92,8 @@ const UserLogin = () => {
                 </Form.Group>
                 <Button onClick={tryToLogin} className="btn-lg btn-block" variant="primary">Log in</Button>{' '}
             </Form>
+            {console.log(auth)}
+            {auth && <Redirect to={{pathname: '/home'}}/>}
         </div>
     )
 }
@@ -96,17 +102,48 @@ const UserRegister = () => {
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
     const [registered, setRegistered] = useState(false);
+    const [status, setStatus] = useState(0);
 
     useEffect(() => {
         console.log(`registered state: ${registered}`)
     }, [registered]);
 
+    useEffect(() => {
+        console.log(status)
+    }, [status])
+
 
     const tryToRegister = (e) =>{
         e.preventDefault()
+        try{
+            fetch('http://127.0.0.1:9123/user/create', {
+                method : 'POST',
+                body: JSON.stringify({login: login.value, password: password.value}),
+                headers: header
+            })
+                .then((response) =>{
+                    setStatus(response.status)
+                })
+        } catch (err) {
+            console.log(err)
+        }
 
     }
 
+    const registerAlert = () =>{
+        if(status === 422){
+            return(<div>error</div>)
+        }
+        else if(status === 200){
+            return(<div>succes</div>)
+        }
+        else if(status === 0){
+            return (<div></div>)
+        }
+        else{
+            return (<div>???</div>)
+        }
+    }
 
     return(
         <div>
@@ -122,8 +159,10 @@ const UserRegister = () => {
                     <Form.Label>Password</Form.Label>
                     <Form.Control ref={(input) => setPassword(input)} type="password" placeholder="Password" />
                 </Form.Group>
+                {registerAlert()}
                 <Button onClick={tryToRegister} className="btn-lg btn-block" variant="primary">Register</Button>{' '}
             </Form>
+
         </div>
     )
 }

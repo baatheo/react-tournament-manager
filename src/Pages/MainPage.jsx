@@ -16,8 +16,29 @@ import {Kontakt} from "./Kontakt";
 import UserLogin, {UserContext} from "../Login/UserLogin"
 import LoginBox from "../Login/UserLogin";
 
-class NavyBar extends React.Component{
-    render(){
+
+const NavyBar = () => {
+    const [isLoged, setIsLoged] = useState(false);
+    const {token, setToken} = useContext(UserContext);
+
+    useEffect(() =>{
+        if(token !== ""){
+            setIsLoged(true);
+        }
+        else{
+            setIsLoged(false)
+        }
+    })
+
+    const doLogout = () => {
+        console.log(`doLogout token "${token}"`)
+        if(token !== ""){
+            setToken("");
+            setIsLoged(false);
+            console.log(token);
+        }
+    }
+
         return(
             <div>
                 <Navbar bg="dark" expand="lg" variant="dark">
@@ -27,17 +48,18 @@ class NavyBar extends React.Component{
                         <Nav className="mr-auto">
                             <Nav.Link href="/home">Home</Nav.Link>
                             <Nav.Link href="/link">Kontakt</Nav.Link>
-                            <Nav.Link href="/login">Login</Nav.Link>
                         </Nav>
                         <Form inline>
-                            <FormControl type="text" placeholder="Szukaj" className="mr-sm-2" />
-                            <Button onClick ={deleteAll}  variant="outline-danger">Usuń baze danych</Button>
+                            {console.log(`token z navbar: ${token}`)}
+                            {console.log(`isLoged ${isLoged}`)}
+                            {!isLoged && <Nav.Link href="/login">Login</Nav.Link>}
+                            {isLoged && <Button variant="outline-primary" onClick={doLogout}>Logout</Button>}
                         </Form>
                     </Navbar.Collapse>
                 </Navbar>
             </div>
-        );
-    }
+        )
+
 }
 
 class MiddleLayout extends React.Component{
