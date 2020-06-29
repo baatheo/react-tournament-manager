@@ -1,7 +1,7 @@
 import * as React from "react";
 import {ListGroup} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import {getAllTeams, getMatches} from "./dataFetch";
+import {getAllTeams, getMatches, getTournaments} from "./dataFetch";
 import "../styles/style1.css"
 
 const tempTeams = [{nazwa:"Pierwsza"},{nazwa:"Druga"},{nazwa:"Trzecia"},{nazwa:"Czwarta"}]
@@ -11,21 +11,21 @@ export class GetTeams extends React.Component{
 
 
     state ={
-        teams : []
+        tournaments : []
     }
 
-    async getTeams(){
-        let tempTeams = await getAllTeams();
+    getTeams(){
+        let tempTours = getTournaments();
         this.setState({
-            teams: tempTeams
+            tournaments: tempTours
         })
     }
 
     render(){
         return(
             <div>
-                <TeamList teams={this.state.teams}/>
-                <Button variant="success" onClick={()=>{this.getTeams()}} type="submit">Pobierz drużyny</Button>
+                <TeamList teams={this.state.tournaments}/>
+                <Button variant="success" onClick={()=>{this.getTeams()}} type="submit">Pobierz Turnieje</Button>
             </div>
         )
     }

@@ -2,13 +2,20 @@ const serverAddress = 'http://127.0.0.1:9123/';
 let allTeams = []
 
 
-const header = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*'
+let header = {
+    'Content-Type' : 'application/json',
+    Authorization: window.localStorage.getItem('token')
+}
+
+function getToken(){
+    return window.localStorage.getItem('token');
 }
 
 export function delivery(token){
-    header['Authorization'] = token;
+    token = 'Bearer '+ token;
+    window.localStorage.setItem('token', token);
+    window.localStorage.getItem('token');
+    console.log(header);
 }
 
 
@@ -81,9 +88,28 @@ export function getSortedTeams() {
     )
 }
 
+export function getTournaments() {
+    let tournaments = []
+    console.log(header);
+    return(
+        fetch("http://127.0.0.1:9123/api/tournament/jwt/", {
+            headers: header,
+            method: 'GET',
+            mode: 'no-cors'
+        })
+            .then(response => response.json())
+            .then(data => {
+                tournaments = data;
+                return tournaments;
+            })
+            .catch(error => console.log(error))
+    )
+
+}
+
+
 
 export function sendTournament(data){
-
     fetch("http://127.0.0.1:9123/api/tournament/",{
         method: 'POST',
         body: JSON.stringify(data),

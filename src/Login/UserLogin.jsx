@@ -9,7 +9,6 @@ export const UserContext = createContext();
 
 const header = {
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
     'Accept': 'application/json'
 }
 
@@ -20,6 +19,7 @@ const UserLogin = () => {
     const [tocken, setTocken] = useState("");
 
     useEffect(() => {
+        console.log(tocken);
         delivery(tocken);
     }, [tocken]);
 
@@ -27,10 +27,10 @@ const UserLogin = () => {
     const tryToLogin = (e) =>{
         e.preventDefault()
         try{
-            fetch('http://127.0.0.1:9123/user/verify', {
+            fetch('http://127.0.0.1:9123/user/verify/', {
                 method : 'POST',
-                body: JSON.stringify({login: login.value, password: password.value}),
-                headers: header
+                headers: header,
+                body: JSON.stringify({login: login.value, password: password.value})
             })
                 .then((response) =>response.text())
                 .then(data => setTocken(data))
