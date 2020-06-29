@@ -14,6 +14,7 @@ import {GetScore} from "./getScore";
 import {BrowserRouter, Switch, Route} from "react-router-dom";
 import {Kontakt} from "./Kontakt";
 import UserLogin, {UserContext} from "../Login/UserLogin"
+import LoginBox from "../Login/UserLogin";
 
 class NavyBar extends React.Component{
     render(){
@@ -78,9 +79,6 @@ class RightLayout extends React.Component{
 }
 
 const Layout = () => {
-    // const [tocken, setTocken] = useState("");
-    const tocken = useContext(UserContext);
-
     return(
         <div className="row">
             <div className="col-2  rounded-top">
@@ -92,8 +90,6 @@ const Layout = () => {
             <div className="col-2 rounded-top">
                 <RightLayout/>
             </div>
-            {tocken}
-            {console.log(`tocken z Layout ${tocken}`)}
         </div>
     );
 }
@@ -114,20 +110,24 @@ class Footer extends React.Component{
 
 
 
-export class MainPage extends React.Component{
-    render(){
+export const MainPage = () => {
+        const [token, setToken] = useState("");
+
+
         return(
-            <BrowserRouter>
-                <div>
-                    <NavyBar/>
-                    <Switch>
-                        <Route path='/login' component={UserLogin}/>
-                        <Route path='/home' component={Layout}/>
-                        <Route path='/link' component={Kontakt}/>
-                    </Switch>
-                    <Footer />
-                </div>
-            </BrowserRouter>
-        );
-    }
+            <UserContext.Provider value={{token, setToken}}>
+                {console.log(`MainPage token from provider ${token}`)}
+                <BrowserRouter>
+                    <div>
+                        <NavyBar/>
+                        <Switch>
+                            <Route path='/login' component={LoginBox}/>
+                            <Route path='/home' component={Layout}/>
+                            <Route path='/link' component={Kontakt}/>
+                        </Switch>
+                        <Footer />
+                    </div>
+                </BrowserRouter>
+            </UserContext.Provider>
+        )
 }
