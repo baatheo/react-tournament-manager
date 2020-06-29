@@ -7,6 +7,10 @@ const header = {
     'Access-Control-Allow-Origin': '*'
 }
 
+export function delivery(token){
+    header['Authorization'] = token;
+}
+
 
 export function sendScore(match){
     console.log(match);
@@ -68,7 +72,7 @@ export function getAllTeams() {
 export function getSortedTeams() {
     let teams = []
     return(
-        fetch(serverAddress + 'api/team/sorted/points')
+        fetch('http://127.0.0.1:9123/api/team/sorted/points' )
             .then(response => response.json())
             .then(data => {
                 teams = data;

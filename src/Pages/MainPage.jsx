@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Navbar from "react-bootstrap/Navbar";
 import Form from "react-bootstrap/Form";
 import FormControl from "react-bootstrap/FormControl";
@@ -11,18 +11,22 @@ import {GetTeams} from "./dataFromDB";
 import {InsertScore} from "./Matches";
 import {deleteAll} from "./dataFetch";
 import {GetScore} from "./getScore";
+import {BrowserRouter, Switch, Route} from "react-router-dom";
+import {Kontakt} from "./Kontakt";
+import UserLogin, {UserContext} from "../Login/UserLogin"
 
 class NavyBar extends React.Component{
     render(){
         return(
             <div>
                 <Navbar bg="dark" expand="lg" variant="dark">
-                    <Navbar.Brand href="#home">Menedżer Turniejowy</Navbar.Brand>
+                    <Navbar.Brand href="home">Menedżer Turniejowy</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">
-                            <Nav.Link href="#home">Home</Nav.Link>
-                            <Nav.Link href="#link">Kontakt</Nav.Link>
+                            <Nav.Link href="/home">Home</Nav.Link>
+                            <Nav.Link href="/link">Kontakt</Nav.Link>
+                            <Nav.Link href="/login">Login</Nav.Link>
                         </Nav>
                         <Form inline>
                             <FormControl type="text" placeholder="Szukaj" className="mr-sm-2" />
@@ -73,22 +77,25 @@ class RightLayout extends React.Component{
     }
 }
 
-class Layout extends React.Component{
-    render(){
-        return(
-            <div className="row">
-                <div className="col-2  rounded-top">
-                    <LeftLayout/>
-                </div>
-                <div className="col-8 rounded-top">
-                    <MiddleLayout/>
-                </div>
-                <div className="col-2 rounded-top">
-                    <RightLayout/>
-                </div>
+const Layout = () => {
+    // const [tocken, setTocken] = useState("");
+    const tocken = useContext(UserContext);
+
+    return(
+        <div className="row">
+            <div className="col-2  rounded-top">
+                <LeftLayout/>
             </div>
-        );
-    }
+            <div className="col-8 rounded-top">
+                <MiddleLayout/>
+            </div>
+            <div className="col-2 rounded-top">
+                <RightLayout/>
+            </div>
+            {tocken}
+            {console.log(`tocken z Layout ${tocken}`)}
+        </div>
+    );
 }
 
 
@@ -110,11 +117,17 @@ class Footer extends React.Component{
 export class MainPage extends React.Component{
     render(){
         return(
-            <div>
-                <NavyBar/>
-                <Layout/>
-                <Footer />
-            </div>
+            <BrowserRouter>
+                <div>
+                    <NavyBar/>
+                    <Switch>
+                        <Route path='/login' component={UserLogin}/>
+                        <Route path='/home' component={Layout}/>
+                        <Route path='/link' component={Kontakt}/>
+                    </Switch>
+                    <Footer />
+                </div>
+            </BrowserRouter>
         );
     }
 }
