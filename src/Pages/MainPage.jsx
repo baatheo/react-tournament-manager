@@ -9,12 +9,13 @@ import {FormToAddTeam, FormToAddTournament} from "./Form";
 import "../styles/style1.css"
 import {GetTeams} from "./dataFromDB";
 import {InsertScore} from "./Matches";
-import {deleteAll} from "./dataFetch";
+import {deleteAll , getTournaments} from "./dataFetch";
 import {GetScore} from "./getScore";
 import {BrowserRouter, Switch, Route} from "react-router-dom";
 import {Kontakt} from "./Kontakt";
 import UserLogin, {UserContext} from "../Login/UserLogin"
 import LoginBox from "../Login/UserLogin";
+import {Table} from "react-bootstrap";
 
 
 const NavyBar = () => {
@@ -68,12 +69,51 @@ class MiddleLayout extends React.Component{
             <div class="card text-black-50 bg-light">
                 <div className="card-body">
                     <FormToAddTournament/>
+                    <GetTournaments/>
                     {/*<InsertScore/>*/}
                 </div>
             </div>
         );
     }
 }
+const GetTournaments = () => {
+    const {token, setToken, name, setName} = useContext(UserContext);
+    const [tournaments, setTournaments]= useState([]);
+    const header = {
+        'Content-Type' : 'application/json'
+    }
+
+    const get = () =>{
+        return(
+        fetch("http://127.0.0.1:9123/api/tournament/jwt/", {
+            headers: header,
+        })
+            .then(response => response.json())
+            .then(data => {
+                setTournaments(data);
+                return tournaments;
+            })
+            .catch(error => console.log(error))
+        )
+    }
+
+    return(
+        <div>
+            <Table>
+                <thead>
+                <th>#</th>
+
+                </thead>
+                <tbody>
+
+                </tbody>
+            </Table>
+            <Button variant="outline-primary" onClick={get}>getjwt</Button>
+        </div>
+    )
+
+}
+
 
 class LeftLayout extends React.Component{
     render(){
@@ -134,11 +174,11 @@ class Footer extends React.Component{
 
 export const MainPage = () => {
         const [token, setToken] = useState("");
-
+        const [name, setName] = useState("");
 
         return(
-            <UserContext.Provider value={{token, setToken}}>
-                {console.log(`MainPage token from provider ${token}`)}
+            <UserContext.Provider value={{token, setToken, name, setName}}>
+                {console.log(`MainPage token from provider ${name}`)}
                 <BrowserRouter>
                     <div>
                         <NavyBar/>

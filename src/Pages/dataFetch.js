@@ -1,13 +1,24 @@
+import axios from 'axios'
+
 const serverAddress = 'http://127.0.0.1:9123/';
 let allTeams = []
 
 
-const header = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*'
+let header = {
+    'Content-Type' : 'application/json',
+
 }
 
+function getToken(){
+    return window.localStorage.getItem('token');
+}
 
+export function delivery(token){
+    token = 'Bearer '+ token;
+    window.localStorage.setItem('token', token);
+    window.localStorage.getItem('token');
+    console.log(header);
+}
 
 
 export function sendScore(match){
@@ -87,4 +98,21 @@ export function sendTournament(data){
         body: JSON.stringify(data),
         headers: header
     })
+}
+
+export function getTournaments() {
+    let tournaments = []
+    console.log(header);
+    return(
+        axios.get("http://127.0.0.1:9123/api/tournament/jwt/", {
+            headers: header,
+        })
+            .then(response => response.json())
+            .then(data => {
+                tournaments = data;
+                return tournaments;
+            })
+            .catch(error => console.log(error))
+    )
+
 }

@@ -7,9 +7,7 @@ import "../styles/Login.css"
 export const UserContext = createContext();
 
 const header = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-    'Accept': 'application/json'
+    'Content-Type': 'application/json'
 }
 
 
@@ -50,10 +48,11 @@ const LoginBox = () => {
 const UserLogin = () => {
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
-    const {token, setToken} = useContext(UserContext);
+    const {token, setToken, name, setName} = useContext(UserContext);
     const [auth, setAuth] = useState(false);
 
     useEffect(() => {
+        setName(login.value)
         if(token !==""){
             setAuth(true);
         }
@@ -92,7 +91,6 @@ const UserLogin = () => {
                 </Form.Group>
                 <Button onClick={tryToLogin} className="btn-lg btn-block" variant="primary">Log in</Button>{' '}
             </Form>
-            {console.log(auth)}
             {auth && <Redirect to={{pathname: '/home'}}/>}
         </div>
     )
