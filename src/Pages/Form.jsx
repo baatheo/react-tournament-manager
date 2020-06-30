@@ -7,10 +7,14 @@ import {SendTeam} from './dataFetch.js';
 import "../styles/style1.css"
 import {InsertScore} from "./Matches";
 import {sendTournament, setSchedule} from "./dataFetch";
+import {UserContext} from "../Login/UserLogin";
+import {useContext} from "react";
 
 const allTeams = [];
+const {token, setToken, name, setName} = useContext(UserContext);
 
 export class FormToAddTournament extends React.Component {
+
     constructor() {
         super();
         this.state = {
@@ -26,7 +30,10 @@ export class FormToAddTournament extends React.Component {
             nameOfTheTournament: this.state.nameOfTheTournament.value
         })
         let newTournament = {
-            name: this.state.nameOfTheTournament.value
+            name: this.state.nameOfTheTournament.value,
+            user : {
+                login : name
+            }
         }
         sendTournament(newTournament);
 
