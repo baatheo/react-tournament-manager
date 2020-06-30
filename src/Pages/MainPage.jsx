@@ -85,8 +85,8 @@ const GetTournaments = () => {
 
     const get = () =>{
         return(
-        fetch("http://127.0.0.1:9123/api/tournament/jwt/", {
-            headers: header,
+        fetch("http://localhost:9123/api/tournament/name/"+ name, {
+            mode: "no-cors"
         })
             .then(response => response.json())
             .then(data => {
@@ -102,10 +102,10 @@ const GetTournaments = () => {
             <Table>
                 <thead>
                 <th>#</th>
-
+                <th>Name</th>
                 </thead>
                 <tbody>
-
+                {tournaments.map((tournament,index) =><tr><td>{index+1}</td><td>{tournament.name}</td></tr>)}
                 </tbody>
             </Table>
             <Button variant="outline-primary" onClick={get}>getjwt</Button>
